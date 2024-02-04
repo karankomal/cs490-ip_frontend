@@ -1,3 +1,9 @@
+.allFilmsHeader {
+  color: white;
+  -webkit-text-stroke: 1px #55608f;
+  font-size: 40px;
+}
+
 .allFilms {
     width: 800px;
 	border-collapse: collapse;
@@ -49,7 +55,6 @@ tbody {
 		}
 	}
 }
-
 
 .pagination {
     position: relative;

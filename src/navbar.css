@@ -5,16 +5,17 @@
 body {
     margin: 0;
     font-family: sans-serif;
+    background-color: #FFE5B4;
 }
 
 .nav {
-    background-color: #333;
+    background-color: #55608f;
     color: white;
     display: flex;
     justify-content: space-between;
     align-items: stretch;
-    gap: 2rem;
-    padding: 0 1rem;
+    gap: 60rem;
+    padding: 1px 7rem;
 }
 
 .site-title{
@@ -26,7 +27,10 @@ body {
     margin: 0;
     list-style: none;
     display: flex;
-    gap: 1rem;
+    gap: 2rem;
+    position:relative;
+    right:200px
+    
 }
 
 .nav a {
@@ -35,13 +39,13 @@ body {
     height: 100%;
     display: flex;
     align-items: center;
-    padding: .25rem;
+    padding: 15px;
 }
 
 .nav li.active {
-    background-color: #555;
+    background-color: #5f2c82;
 }
 
 .nav li:hover {
-    background-color: #777;
+    background-color: #49a09d;
 }
