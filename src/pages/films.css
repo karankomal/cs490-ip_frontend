@@ -1,0 +1,102 @@
+.allFilms {
+    width: 800px;
+	border-collapse: collapse;
+	overflow: hidden;
+	box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    margin: 0;
+	background: linear-gradient(45deg, #49a09d, #5f2c82);
+	font-family: sans-serif;
+	font-weight: 100;
+    border-radius: 5px;
+}
+
+th,
+td {
+	padding: 15px;
+	background-color: rgba(255,255,255,0.2);
+	color: #fff;
+}
+
+th {
+	text-align: center;
+}
+
+thead {
+	th {
+		background-color: #55608f;
+	}
+}
+
+tbody {
+	tr {
+		&:hover {
+			background-color: rgba(255,255,255,0.3);
+		}
+	}
+	td {
+		position: relative;
+		&:hover {
+			&:before {
+				content: "";
+				position: absolute;
+				left: 0;
+				right: 0;
+				top: -9999px;
+				bottom: -9999px;
+				background-color: rgba(255,255,255,0.2);
+				z-index: -1;
+			}
+		}
+	}
+}
+
+
+.pagination {
+    position: relative;
+    height: 60px;
+    background: linear-gradient(45deg, #49a09d, #5f2c82);
+    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(3px);
+    border-radius: 5px;
+    list-style: none;
+  }
+
+.activePageNum {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+.pagination a {
+    position: relative;
+    padding: 20px 25px;
+    text-decoration: none;
+    color: #fff;
+    font-weight: 500;
+    cursor: pointer;
+  
+  &:hover {
+    filter: brightness(1);
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.disabled-page {
+   color: black;
+}
+
+.previous:hover:not(.active) {
+    border-radius: 20%;
+    cursor: pointer;
+    border: 20px;
+    background: rgba(255, 255, 255, 0);
+    font-weight: 500;
+}
+.next:hover:not(.active) {
+    border-radius: 20%;
+    cursor: pointer;
+    border: 20px;
+    background: rgba(255, 255, 255, 0);
+    font-weight: 500;
+}
