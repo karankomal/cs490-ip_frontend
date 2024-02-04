@@ -1,30 +1,59 @@
 import {useState, useEffect} from 'react';
 import axios from 'axios';
-import { Modal, Button } from "react-bootstrap"
+import { Modal, Button, CloseButton } from "react-bootstrap"
 import './home.css'
 
-export default function Home() {
-    const [data, setData] = useState([])
 
-    const [showM, set_Show_M] = useState(false); 
-    const [modalData, set_Modal_Data] = useState([]);  
-    const modalShow = () => { set_Show_M(true);}; 
-    const closeModal = () => { set_Show_M(false);}; 
+export default function Home() {
+    const [top5Rented, setTop5Rented] = useState([])
+    const [top5Actors, setTop5Actors] = useState([])
+
+    const [showM, setShowM] = useState(false); 
+    const [modalData, setModalData] = useState([]);  
+    const modalShow = () => { setShowM(true);}; 
+    const closeModal = () => { setShowM(false);}; 
     const openModalHandle = () => { 
-        set_Modal_Data(modalData); 
         modalShow();
     }; 
+    const [modalType, setModalType] = useState("")
+    const [actorName, setActorName] = useState("")
 
     useEffect(() => {
         axios.get(`/top5Rented`)
         .then((response) => {
-            console.log(response)
-            setData(response.data)
+            setTop5Rented(response.data)
         })
             .catch((error) => {
             console.error(error);
         });
     }, [])
+
+    useEffect(() => {
+        axios.get(`/top5Actors`)
+        .then((response2) => {
+            setTop5Actors(response2.data)
+        })
+            .catch((error) => {
+            console.error(error);
+        });
+    }, [])
+    
+    function getFilmDetails(film_id) {
+        axios.get(`/film/${film_id}`)
+            .then((response) => {
+                setModalData(response.data)
+            })
+        setModalType("filmDetails")
+        openModalHandle()
+    }
+    function getTop5Films(actor_id) {
+        axios.get(`/top5/actor/${actor_id}`)
+            .then((response) => {
+                setModalData(response.data)
+            })
+        setModalType("actorTop5Films")
+        openModalHandle()
+    }
 
     return(
         <div>
@@ -32,25 +61,19 @@ export default function Home() {
             <table className="top5Rented">
                 <thead>
                     <tr>
-                        <th key='id' scope='col'>ID</th>
-                        <th key='title' scope='col'>Title</th>
-                        <th key='genre' scope='col'>Genre</th>
-                        <th key='rentalCount' scope='col'>Rental Count</th>
+                        <th scope='col'>ID</th>
+                        <th scope='col'>Title</th>
+                        <th scope='col'>Genre</th>
+                        <th scope='col'>Rental Count</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {data.map(film => (
-                        <tr onClick={() => {
-                            axios.get(`/film/${film[0]}`)
-                            .then((response) => {
-                                set_Modal_Data(response.data)
-                            })
-                            openModalHandle()
-                        }}>
-                            <td key={film[0]}>{film[0]}</td>
-                            <td key={film[1]}>{film[1]}</td>
-                            <td key={film[2]}>{film[2]}</td>
-                            <td key={film[3]}>{film[3]}</td>
+                    {top5Rented.map(film => (
+                        <tr key={film[0]} onClick={() => {getFilmDetails(film[0])}}>
+                            <td>{film[0]}</td>
+                            <td>{film[1]}</td>
+                            <td>{film[2]}</td>
+                            <td>{film[3]}</td>
                         </tr>
                     ))}
                 </tbody>
@@ -61,37 +84,61 @@ export default function Home() {
                     onHide={closeModal}
                     className="modal"> 
                     <Modal.Header className="modal-header"> 
-                        <Modal.Title> 
-                            {modalData.map((film) =>(film[1]))}
-                        </Modal.Title> 
+                        <Modal.Title className="modal-title"> 
+                            {(modalType === "filmDetails") ? modalData.map((film) =>(film[1])) : `${actorName}'s Top 5 Movies`}
+                        </Modal.Title>
+                        <CloseButton className="closeBtn" onClick={ 
+                                closeModal}>X</CloseButton>
                     </Modal.Header> 
-                    <Modal.Body className="modal-content"> 
-                    {modalData.map((film) => (
-                        <ul>
-                            <li key={film[0]}>Film ID: {film[0]}</li>
-                            <li key={film[2]}>Description: {film[2]}</li>
-                            <li key={film[3]}>Release Year: {film[3]}</li>
-                            <li key={film[6]}>Rental Duration: {film[6]} days</li>
-                            <li key={film[7]}>Rental Rate: ${film[7]}</li>
-                            <li key={film[8]}>Length: {film[8]} minutes</li>
-                            <li key={film[9]}>Replacement Cost: ${film[9]}</li>
-                            <li key={film[10]}>Rating: {film[10]}</li>
-                            <li key={film[11]}>Special Features: {film[11]}</li>
-                            <li key={film[12]}>Last Updated: {film[12]}</li>
-                        </ul>
-                        ))}
+                    <Modal.Body className="modal-body">
+                        {(modalType === "filmDetails") ?
+                            modalData.map((film) => (
+                            <ul key={film[0]}>
+                                <li><b>Film ID:</b> {film[0]}</li>
+                                <li><b>Description:</b> {film[2]}</li>
+                                <li><b>Release Year:</b> {film[3]}</li>
+                                <li><b>Rental Duration:</b> {film[6]} days</li>
+                                <li><b>Rental Rate:</b> ${film[7]}</li>
+                                <li><b>Length:</b> {film[8]} minutes</li>
+                                <li><b>Replacement Cost:</b> ${film[9]}</li>
+                                <li><b>Rating:</b> {film[10]}</li>
+                                <li><b>Special Features:</b> {film[11]}</li>
+                                <li><b>Last Updated:</b> {film[12]}</li>
+                            </ul>
+                            )) : 
+                            modalData.map((actor) =>
+                            <ul key={actor[0]}>
+                                <li>{actor[1]}</li>
+                            </ul>)}
                     </Modal.Body> 
                     <Modal.Footer className="modal-footer"> 
                         <Button 
-                            className="close"
-                            variant="secondary"
-                            onClick={ 
-                                closeModal} > 
-                            X
+                            className="primaryBtn"
+                            variant="primary"> 
+                            Primary Button
                         </Button> 
                     </Modal.Footer> 
                 </Modal>
             </div>
+            <h1 className='top5ActorsHeader'>Top 5 Actors</h1>
+            <table className="top5Actors">
+                <thead>
+                    <tr>
+                        <th scope='col'>ID</th>
+                        <th scope='col'>Name</th>
+                        <th scope='col'>Movie Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {top5Actors.map(actor => (
+                        <tr key={actor[0]} onClick={() => {setActorName(`${actor[1].charAt(0) + actor[1].slice(1).toLowerCase()} ${actor[2].charAt(0) + actor[2].slice(1).toLowerCase()}`); getTop5Films(actor[0])}}>
+                            <td>{actor[0]}</td>
+                            <td>{actor[1].charAt(0) + actor[1].slice(1).toLowerCase()} {actor[2].charAt(0) + actor[2].slice(1).toLowerCase()}</td>
+                            <td>{actor[3]}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     )
 }
