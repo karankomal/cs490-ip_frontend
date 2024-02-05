@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Button, CloseButton, Modal } from "react-bootstrap";
+import { CloseButton, Modal } from "react-bootstrap";
 import ReactPaginate from "react-paginate";
 import "./customers.css";
 import "./modal.css";

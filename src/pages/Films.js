@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { AwesomeButton } from "react-awesome-button";
 import "react-awesome-button/dist/styles.css";
-import { Button, CloseButton, Modal } from "react-bootstrap";
+import { CloseButton, Modal } from "react-bootstrap";
 import ReactPaginate from "react-paginate";
 import "./aws-btn.css";
 import "./films.css";
