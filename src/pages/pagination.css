@@ -1,0 +1,49 @@
+.pagination {
+	position: relative;
+	height: 60px;
+	background: linear-gradient(45deg, #49a09d, #5f2c82);
+	box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.3);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	backdrop-filter: blur(3px);
+	border-radius: 5px;
+	list-style: none;
+}
+
+.activePageNum {
+	background: rgba(255, 255, 255, 0.2);
+}
+
+.pagination a {
+	position: relative;
+	padding: 20px 25px;
+	text-decoration: none;
+	color: #fff;
+	font-weight: 500;
+	cursor: pointer;
+
+	&:hover {
+		filter: brightness(1);
+		background-color: rgba(255, 255, 255, 0.2);
+	}
+}
+
+.disabled-page {
+	color: black;
+}
+
+.previous:hover:not(.active) {
+	border-radius: 20%;
+	cursor: pointer;
+	border: 20px;
+	background: rgba(255, 255, 255, 0);
+	font-weight: 500;
+}
+.next:hover:not(.active) {
+	border-radius: 20%;
+	cursor: pointer;
+	border: 20px;
+	background: rgba(255, 255, 255, 0);
+	font-weight: 500;
+}
