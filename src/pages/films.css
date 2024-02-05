@@ -1,5 +1,124 @@
+:root {
+	--arrow-bg: rgba(255, 255, 255, 0.3);
+	--arrow-icon: url(https://upload.wikimedia.org/wikipedia/commons/9/9d/Caret_down_font_awesome_whitevariation.svg);
+	--option-bg: #55608f;
+	--select-bg: #55608f;
+}
+
 .allFilmsHeader {
 	color: white;
 	-webkit-text-stroke: 1px #55608f;
 	font-size: 40px;
+}
+.searchComp {
+	display: inline-flex;
+	inline-size: 100%;
+	align-items: center;
+	justify-content: center;
+	flex-direction: row;
+}
+.search-box {
+	width: fit-content;
+	height: fit-content;
+	position: relative;
+	padding: 0;
+}
+.input-search {
+	height: 50px;
+	width: 50px;
+	border-style: none;
+	padding: 10px;
+	font-size: 18px;
+	letter-spacing: 2px;
+	outline: none;
+	border-radius: 25px;
+	transition: all 0.5s ease-in-out;
+	background: linear-gradient(45deg, #49a09d, #5f2c82);
+	padding-right: 40px;
+	color: #fff;
+	margin-bottom: 5px;
+}
+.input-search::placeholder {
+	color: white;
+	font-size: 18px;
+	letter-spacing: 2px;
+	font-weight: 100;
+	border-radius: 5px;
+}
+.btn-search {
+	width: 50px;
+	height: 50px;
+	border-style: none;
+	font-size: 20px;
+	font-weight: bold;
+	outline: none;
+	cursor: pointer;
+	border-radius: 50%;
+	position: absolute;
+	right: 0px;
+	color: #ffffff;
+	background-color: transparent;
+	pointer-events: painted;
+}
+.btn-search:focus ~ .input-search {
+	width: 300px;
+	border-radius: 5px;
+	background-color: transparent;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+	transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
+}
+.input-search:focus {
+	width: 300px;
+	border-radius: 5px;
+	background-color: transparent;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+	transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
+}
+
+select {
+	/* Reset */
+	appearance: none;
+	border: 0;
+	outline: 0;
+	font: inherit;
+	padding: 10px;
+	font-size: 18px;
+	letter-spacing: 2px;
+	padding-right: 0px;
+	margin-bottom: 5px;
+	height: 50px;
+	width: 50px;
+	position: relative;
+	margin-left: 0%;
+	margin-right: 5%;
+
+	/* Personalize */
+	width: 20rem;
+	padding: 1rem 4rem 1rem 1rem;
+	background: var(--arrow-icon) no-repeat right 0.8em center / 1.4em,
+		linear-gradient(45deg, #49a09d, #5f2c82),
+		linear-gradient(to left, var(--arrow-bg) 3em, var(--select-bg) 3em);
+	color: white;
+	border-radius: 0.25em;
+	box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.2);
+	cursor: pointer;
+	/* Remove IE arrow */
+	&::-ms-expand {
+		display: none;
+	}
+	/* Remove focus outline */
+	&:focus {
+		outline: none;
+	}
+}
+
+/* <option> colors */
+select option {
+	color: inherit;
+	background-color: var(--option-bg);
+	border-radius: 5px;
+}
+
+.filterByHeader {
+	font-size: 24px;
 }

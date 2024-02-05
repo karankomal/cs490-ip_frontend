@@ -1,3 +1,5 @@
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { AwesomeButton } from "react-awesome-button";
@@ -12,6 +14,8 @@ import "./tables.css";
 
 export default function Films() {
 	const [films, setFilms] = useState([]);
+	const [filteredFilms, setFilteredFilms] = useState([]);
+	const [selectedFilter, setSelectedFilter] = useState(4);
 
 	const [page, setPage] = useState(1);
 	const [pageSize] = useState(10);
@@ -34,16 +38,27 @@ export default function Films() {
 		modalShow();
 	};
 
+	const [searchValue, setSearchValue] = useState("");
+
 	useEffect(() => {
 		axios
 			.get(`/allfilms`)
 			.then((response) => {
 				setFilms(response.data.films);
+				setFilteredFilms(response.data.films);
 			})
 			.catch((error) => {
 				console.error(error);
 			});
-	}, [page, pageSize]);
+	}, []);
+
+	useEffect(() => {
+		const filteredFilms = films.filter((value) =>
+			value[1].toLowerCase().includes(searchValue.toLowerCase())
+		);
+
+		setFilteredFilms(filteredFilms);
+	}, [searchValue, setSelectedFilter]);
 
 	function getFilmDetails(film_id) {
 		axios.get(`/film/${film_id}`).then((response) => {
@@ -55,6 +70,35 @@ export default function Films() {
 	return (
 		<>
 			<h1 className="allFilmsHeader">All Films</h1>
+			<div className="searchComp">
+				<select
+					className="searchSelect"
+					placeholder=""
+					onChange={(e) => setSelectedFilter(e.target.value)}
+				>
+					<option selected value="" disabled>
+						Select Search Filter
+					</option>
+					<option value="0">Film Title</option>
+					<option value="1">Film Genre</option>
+					<option value="2">Actor</option>
+				</select>
+				<div className="search-box">
+					<button class="btn-search">
+						<FontAwesomeIcon
+							icon={faMagnifyingGlass}
+							style={{ color: "#ffffff" }}
+						/>
+					</button>
+					<input
+						className="input-search"
+						type="text"
+						onChange={(e) => setSearchValue(e.target.value)}
+						value={searchValue}
+						placeholder="Type To Search"
+					/>
+				</div>
+			</div>
 			<table className="allFilms">
 				<thead>
 					<tr>
@@ -64,18 +108,20 @@ export default function Films() {
 					</tr>
 				</thead>
 				<tbody>
-					{films.slice(indexOfFirstFilm, indexOfLastFilm).map((film) => (
-						<tr
-							key={film[0]}
-							onClick={() => {
-								getFilmDetails(film[0]);
-							}}
-						>
-							<td>{film[0]}</td>
-							<td>{film[1]}</td>
-							<td>{film[2]}</td>
-						</tr>
-					))}
+					{filteredFilms
+						.slice(indexOfFirstFilm, indexOfLastFilm)
+						.map((film) => (
+							<tr
+								key={film[0]}
+								onClick={() => {
+									getFilmDetails(film[0]);
+								}}
+							>
+								<td>{film[0]}</td>
+								<td>{film[1]}</td>
+								<td>{film[2]}</td>
+							</tr>
+						))}
 				</tbody>
 			</table>
 			<div className="modal-container">
@@ -131,10 +177,9 @@ export default function Films() {
 					</Modal.Footer>
 				</Modal>
 			</div>
-
 			<ReactPaginate
 				onPageChange={paginate}
-				pageCount={Math.ceil(films.length / pageSize)}
+				pageCount={Math.ceil(filteredFilms.length / pageSize)}
 				previousLabel={"<"}
 				nextLabel={">"}
 				containerClassName={"pagination"}
