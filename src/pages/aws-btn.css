@@ -1,0 +1,40 @@
+.aws-btn {
+	margin-top: 4px;
+	margin-bottom: 4px;
+	--button-default-height: 40px;
+	--button-default-font-size: 14px;
+	--button-default-border-radius: 5px;
+	--button-horizontal-padding: 20px;
+	--button-vertical-padding: 5px;
+	--button-raise-level: 0px;
+	--button-hover-pressure: 1;
+	--transform-speed: 0.175s;
+	--button-primary-color: white;
+	--button-primary-color-dark: #3d50a1;
+	--button-primary-color-light: #55608f;
+	--button-primary-color-hover: #7f92e6;
+	--button-primary-color-active: #556193;
+	--button-primary-border: none;
+	--button-secondary-color: #848289;
+	--button-secondary-color-dark: #5e5d62;
+	--button-secondary-color-light: #ffffff;
+	--button-secondary-color-hover: #77757c;
+	--button-secondary-color-active: #6b696f;
+	--button-secondary-border: none;
+	--button-anchor-color: #3eb7b9;
+	--button-anchor-color-dark: #2b7e80;
+	--button-anchor-color-light: #ffffff;
+	--button-anchor-color-hover: #3bafb1;
+	--button-anchor-color-active: #38a4a6;
+	--button-anchor-border: none;
+	--button-danger-color: #eba0bd;
+	--button-danger-color-dark: #de6191;
+	--button-danger-color-light: #ffffff;
+	--button-danger-color-hover: #e998b7;
+	--button-danger-color-active: #e78bae;
+	--button-danger-border: none;
+
+	&:hover {
+		--button-primary-color-light: white;
+	}
+}

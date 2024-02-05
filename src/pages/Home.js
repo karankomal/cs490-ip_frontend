@@ -147,11 +147,6 @@ export default function Home() {
 									</ul>
 							  ))}
 					</Modal.Body>
-					<Modal.Footer className="modal-footer">
-						<Button className="primaryBtn" variant="primary">
-							Primary Button
-						</Button>
-					</Modal.Footer>
 				</Modal>
 			</div>
 			<h1 className="top5ActorsHeader">Top 5 Actors</h1>

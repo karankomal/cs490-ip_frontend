@@ -1,7 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { AwesomeButton } from "react-awesome-button";
+import "react-awesome-button/dist/styles.css";
 import { Button, CloseButton, Modal } from "react-bootstrap";
 import ReactPaginate from "react-paginate";
+import "./aws-btn.css";
 import "./films.css";
 import "./modal.css";
 import "./pagination.css";
@@ -122,9 +125,9 @@ export default function Films() {
 						))}
 					</Modal.Body>
 					<Modal.Footer className="modal-footer">
-						<Button className="primaryBtn" variant="primary">
-							Primary Button
-						</Button>
+						<AwesomeButton type="primary" className="primaryBtn">
+							Primary
+						</AwesomeButton>
 					</Modal.Footer>
 				</Modal>
 			</div>

@@ -142,25 +142,20 @@ export default function Customers() {
 									<b>Email:</b> {customer[4]}
 								</li>
 								<li>
+									<b>Currently Renting:</b> {currentlyRenting}
+								</li>
+								<li>
+									<b>Rented Previously:</b> {previouslyRented}
+								</li>
+								<li>
 									<b>Created:</b> {customer[7]}
 								</li>
 								<li>
 									<b>Last Updated:</b> {customer[8]}
 								</li>
-								<li>
-									<b>Currently Renting:</b> {currentlyRenting}
-								</li>
-								<li>
-									<b>Total Movies Rented Previously:</b> {previouslyRented}
-								</li>
 							</ul>
 						))}
 					</Modal.Body>
-					<Modal.Footer className="modal-footer">
-						<Button className="primaryBtn" variant="primary">
-							Primary Button
-						</Button>
-					</Modal.Footer>
 				</Modal>
 			</div>
 			<ReactPaginate
