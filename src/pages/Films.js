@@ -15,7 +15,7 @@ import "./tables.css";
 export default function Films() {
 	const [films, setFilms] = useState([]);
 	const [filteredFilms, setFilteredFilms] = useState([]);
-	const [selectedFilter, setSelectedFilter] = useState(4);
+	const [selectedFilter, setSelectedFilter] = useState(3);
 
 	const [page, setPage] = useState(1);
 	const [pageSize] = useState(10);
@@ -53,12 +53,29 @@ export default function Films() {
 	}, []);
 
 	useEffect(() => {
-		const filteredFilms = films.filter((value) =>
-			value[1].toLowerCase().includes(searchValue.toLowerCase())
-		);
+		var filteredFilms = [];
+		// eslint-disable-next-line eqeqeq
+		if (selectedFilter == 0) {
+			filteredFilms = films.filter((value) =>
+				value[1].toLowerCase().includes(searchValue.toLowerCase())
+			);
+			// eslint-disable-next-line eqeqeq
+		} else if (selectedFilter == 1) {
+			console.log(selectedFilter);
+			filteredFilms = films.filter((value) =>
+				value[2].toLowerCase().includes(searchValue.toLowerCase())
+			);
+			// eslint-disable-next-line eqeqeq
+		} else if (selectedFilter == 2) {
+			console.log(selectedFilter);
+			filteredFilms = films.filter((value) =>
+				value[3].toLowerCase().includes(searchValue.toLowerCase())
+			);
+		}
 
 		setFilteredFilms(filteredFilms);
-	}, [searchValue, setSelectedFilter]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [searchValue, selectedFilter]);
 
 	function getFilmDetails(film_id) {
 		axios.get(`/film/${film_id}`).then((response) => {
@@ -74,7 +91,9 @@ export default function Films() {
 				<select
 					className="searchSelect"
 					placeholder=""
-					onChange={(e) => setSelectedFilter(e.target.value)}
+					onChange={(e) => {
+						setSelectedFilter(e.target.value);
+					}}
 				>
 					<option selected value="" disabled>
 						Select Search Filter
@@ -105,6 +124,7 @@ export default function Films() {
 						<th scope="col">ID</th>
 						<th scope="col">Title</th>
 						<th scope="col">Genre</th>
+						<th scope="col">Featured Actors</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -120,6 +140,9 @@ export default function Films() {
 								<td>{film[0]}</td>
 								<td>{film[1]}</td>
 								<td>{film[2]}</td>
+								<td>
+									{film[3].split(", ")[0]} & {film[3].split(", ")[1]}
+								</td>
 							</tr>
 						))}
 				</tbody>
@@ -142,6 +165,9 @@ export default function Films() {
 								</li>
 								<li>
 									<b>Description:</b> {film[2]}
+								</li>
+								<li>
+									<b>Starring:</b> {film[13]}
 								</li>
 								<li>
 									<b>Release Year:</b> {film[3]}

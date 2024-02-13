@@ -114,6 +114,9 @@ export default function Home() {
 											<b>Description:</b> {film[2]}
 										</li>
 										<li>
+											<b>Starring:</b> {film[13]}
+										</li>
+										<li>
 											<b>Release Year:</b> {film[3]}
 										</li>
 										<li>
