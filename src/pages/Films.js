@@ -2,7 +2,7 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { AwesomeButton } from "react-awesome-button";
+import { AwesomeButtonProgress } from "react-awesome-button";
 import "react-awesome-button/dist/styles.css";
 import { CloseButton, Modal } from "react-bootstrap";
 import ReactPaginate from "react-paginate";
@@ -16,6 +16,8 @@ export default function Films() {
 	const [films, setFilms] = useState([]);
 	const [filteredFilms, setFilteredFilms] = useState([]);
 	const [selectedFilter, setSelectedFilter] = useState(3);
+	const [customer_id, setCustomerID] = useState("");
+	const [film_id, setFilmID] = useState(0);
 
 	const [page, setPage] = useState(1);
 	const [pageSize] = useState(10);
@@ -32,6 +34,7 @@ export default function Films() {
 	};
 	const closeModal = () => {
 		set_Show_M(false);
+		setCustomerID("");
 	};
 	const openModalHandle = () => {
 		set_Modal_Data(modalData);
@@ -61,13 +64,11 @@ export default function Films() {
 			);
 			// eslint-disable-next-line eqeqeq
 		} else if (selectedFilter == 1) {
-			console.log(selectedFilter);
 			filteredFilms = films.filter((value) =>
 				value[2].toLowerCase().includes(searchValue.toLowerCase())
 			);
 			// eslint-disable-next-line eqeqeq
 		} else if (selectedFilter == 2) {
-			console.log(selectedFilter);
 			filteredFilms = films.filter((value) =>
 				value[3].toLowerCase().includes(searchValue.toLowerCase())
 			);
@@ -82,6 +83,7 @@ export default function Films() {
 			set_Modal_Data(response.data);
 		});
 		openModalHandle();
+		setFilmID(film_id);
 	}
 
 	return (
@@ -94,8 +96,9 @@ export default function Films() {
 					onChange={(e) => {
 						setSelectedFilter(e.target.value);
 					}}
+					defaultValue={"DEFAULT"}
 				>
-					<option selected value="" disabled>
+					<option value="DEFAULT" disabled>
 						Select Search Filter
 					</option>
 					<option value="0">Film Title</option>
@@ -103,7 +106,7 @@ export default function Films() {
 					<option value="2">Actor</option>
 				</select>
 				<div className="search-box">
-					<button class="btn-search">
+					<button className="btn-search">
 						<FontAwesomeIcon
 							icon={faMagnifyingGlass}
 							style={{ color: "#ffffff" }}
@@ -197,9 +200,41 @@ export default function Films() {
 						))}
 					</Modal.Body>
 					<Modal.Footer className="modal-footer">
-						<AwesomeButton type="primary" className="primaryBtn">
-							Primary
-						</AwesomeButton>
+						<div className="rentFilm">
+							<input
+								className="rentFilmInput"
+								type="number"
+								min="0"
+								placeholder="Enter Customer ID"
+								value={customer_id}
+								onChange={(e) => setCustomerID(e.target.value)}
+							/>
+							<AwesomeButtonProgress
+								type="primary"
+								onPress={async (call, next) => {
+									const custID = { customer_id };
+									const fID = { film_id };
+									const response = await fetch("/rentfilm", {
+										method: "POST",
+										headers: {
+											"Content-Type": "application/json",
+										},
+										body: JSON.stringify([custID, fID]),
+									});
+									if (response.ok) {
+										setTimeout(() => {
+											next(true, "Rental Confirmed");
+										}, 1000);
+									} else {
+										setTimeout(() => {
+											next(false, response.headers.get("error"));
+										}, 1000);
+									}
+								}}
+							>
+								Rent Out Movie
+							</AwesomeButtonProgress>
+						</div>
 					</Modal.Footer>
 				</Modal>
 			</div>
