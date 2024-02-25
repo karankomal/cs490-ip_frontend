@@ -14,8 +14,11 @@ import "./tables.css";
 
 export default function Films() {
 	const [films, setFilms] = useState([]);
+
 	const [filteredFilms, setFilteredFilms] = useState([]);
 	const [selectedFilter, setSelectedFilter] = useState(3);
+	const [searchValue, setSearchValue] = useState("");
+
 	const [customer_id, setCustomerID] = useState("");
 	const [film_id, setFilmID] = useState(0);
 
@@ -40,8 +43,6 @@ export default function Films() {
 		set_Modal_Data(modalData);
 		modalShow();
 	};
-
-	const [searchValue, setSearchValue] = useState("");
 
 	useEffect(() => {
 		axios

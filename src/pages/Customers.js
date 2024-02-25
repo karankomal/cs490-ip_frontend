@@ -1,3 +1,5 @@
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { CloseButton, Modal } from "react-bootstrap";
@@ -9,8 +11,13 @@ import "./tables.css";
 
 export default function Customers() {
 	const [customers, setCustomers] = useState([]);
+	const [customerName, setCustomerName] = useState("");
 	const [currentlyRenting, setCurrentlyRenting] = useState(0);
 	const [previouslyRented, setPreviouslyRented] = useState(0);
+
+	const [filteredCustomers, setFilteredCustomers] = useState([]);
+	const [selectedFilter, setSelectedFilter] = useState(3);
+	const [searchValue, setSearchValue] = useState("");
 
 	const [page, setPage] = useState(1);
 	const [pageSize] = useState(10);
@@ -33,18 +40,40 @@ export default function Customers() {
 		modalShow();
 	};
 
-	const [customerName, setCustomerName] = useState("");
-
 	useEffect(() => {
 		axios
 			.get(`/allcustomers`)
 			.then((response) => {
 				setCustomers(response.data);
+				setFilteredCustomers(response.data);
 			})
 			.catch((error) => {
 				console.error(error);
 			});
 	}, [page, pageSize]);
+
+	useEffect(() => {
+		var filteredCustomers = [];
+		// eslint-disable-next-line eqeqeq
+		if (selectedFilter == 0) {
+			filteredCustomers = customers.filter((value) =>
+				(value[0] + "").includes((searchValue + "").toLowerCase())
+			);
+			// eslint-disable-next-line eqeqeq
+		} else if (selectedFilter == 1) {
+			filteredCustomers = customers.filter((value) =>
+				value[2].toLowerCase().includes(searchValue.toLowerCase())
+			);
+			// eslint-disable-next-line eqeqeq
+		} else if (selectedFilter == 2) {
+			filteredCustomers = customers.filter((value) =>
+				value[3].toLowerCase().includes(searchValue.toLowerCase())
+			);
+		}
+
+		setFilteredCustomers(filteredCustomers);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [searchValue, selectedFilter]);
 
 	function getCustomerDetails(customer_id) {
 		axios.get(`/customer/${customer_id}`).then((response) => {
@@ -74,6 +103,38 @@ export default function Customers() {
 	return (
 		<>
 			<h1 className="customersHeader">Customers</h1>
+			<div className="searchComp">
+				<select
+					className="searchSelect"
+					placeholder=""
+					onChange={(e) => {
+						setSelectedFilter(e.target.value);
+					}}
+					defaultValue={"DEFAULT"}
+				>
+					<option value="DEFAULT" disabled>
+						Select Search Filter
+					</option>
+					<option value="0">Customer ID</option>
+					<option value="1">First Name</option>
+					<option value="2">Last Name</option>
+				</select>
+				<div className="search-box">
+					<button className="btn-search">
+						<FontAwesomeIcon
+							icon={faMagnifyingGlass}
+							style={{ color: "#ffffff" }}
+						/>
+					</button>
+					<input
+						className="input-search"
+						type="text"
+						onChange={(e) => setSearchValue(e.target.value)}
+						value={searchValue}
+						placeholder="Type To Search"
+					/>
+				</div>
+			</div>
 			<table className="allCustomers">
 				<thead>
 					<tr>
@@ -89,7 +150,7 @@ export default function Customers() {
 					</tr>
 				</thead>
 				<tbody>
-					{customers
+					{filteredCustomers
 						.slice(indexOfFirstCustomer, indexOfLastCustomer)
 						.map((customer) => (
 							<tr
@@ -160,7 +221,7 @@ export default function Customers() {
 			</div>
 			<ReactPaginate
 				onPageChange={paginate}
-				pageCount={Math.ceil(customers.length / pageSize)}
+				pageCount={Math.ceil(filteredCustomers.length / pageSize)}
 				previousLabel={"<"}
 				nextLabel={">"}
 				containerClassName={"pagination"}
