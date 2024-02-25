@@ -5,8 +5,8 @@
 }
 
 .addNewCustomerHeader {
-	margin-top: -20px !important;
-	margin-bottom: 15px !important;
+	margin-top: 0px !important;
+	margin-bottom: 0px !important;
 	--button-default-height: 50px !important;
 	--button-default-font-size: 18px !important;
 	--button-default-border-radius: 5px;

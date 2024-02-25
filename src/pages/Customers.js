@@ -128,90 +128,28 @@ export default function Customers() {
 				: setPreviouslyRented(response.data[0][1]);
 		});
 	}
+	const [modal2Type, setModal2Type] = useState("");
+	const editButtonClick = (e, customer) => {
+		// Prevent the click event from propagating to the table row
+		e.stopPropagation();
+		// Handle button click logic here
+		setModal2Type("edit");
+		setCustomerName(
+			`${customer[2].charAt(0) + customer[2].slice(1).toLowerCase()} ${
+				customer[3].charAt(0) + customer[3].slice(1).toLowerCase()
+			}`
+		);
+		setFirstName(customer[2]);
+		setLastName(customer[3]);
+		setEmail(customer[4]);
+		setCustomerID(customer[0]);
+		openModalHandle2();
+	};
 
 	return (
 		<>
 			<h1 className="customersHeader">Customers</h1>
-			<AwesomeButton
-				type="primary"
-				className="addNewCustomerHeader"
-				onPress={openModalHandle2}
-			>
-				Add New Customer
-			</AwesomeButton>
-			<div className="modal-container">
-				<Modal show={showM2} onHide={closeModal2} className="modal">
-					<Modal.Header className="modal-header">
-						<Modal.Title className="modal-title">
-							{"Adding New Customer"}
-						</Modal.Title>
-						<CloseButton className="closeBtn" onClick={closeModal2}>
-							X
-						</CloseButton>
-					</Modal.Header>
-					<Modal.Body className="modal-body">
-						<div className="registrationForm">
-							<input
-								className="firstNameInput"
-								type="text"
-								placeholder="Enter First Name"
-								value={first_name}
-								onChange={(e) =>
-									setFirstName(e.target.value.replace(/[^a-zA-Z]/gi, ""))
-								}
-							/>
-							<input
-								className="lastNameInput"
-								type="text"
-								placeholder="Enter Last Name"
-								value={last_name}
-								onChange={(e) =>
-									setLastName(e.target.value.replace(/[^a-zA-Z]/gi, ""))
-								}
-							/>
-							<input
-								className="emailInput"
-								type="email"
-								name="Email"
-								placeholder="Enter Email"
-								value={email}
-								onChange={(e) =>
-									setEmail(e.target.value.replace(/[^a-zA-Z0-9\-+~_@.]/gi, ""))
-								}
-								required
-							/>
-						</div>
-					</Modal.Body>
-					<Modal.Footer className="modal-footer">
-						<AwesomeButtonProgress
-							type="primary"
-							onPress={async (call, next) => {
-								const firstName = { first_name };
-								const lastName = { last_name };
-								const emailInput = { email };
-								const response = await fetch("/addcustomer", {
-									method: "POST",
-									headers: {
-										"Content-Type": "application/json",
-									},
-									body: JSON.stringify([firstName, lastName, emailInput]),
-								});
-								if (response.ok) {
-									setTimeout(() => {
-										next(true, "Added!");
-									}, 1000);
-								} else {
-									setTimeout(() => {
-										next(false, response.headers.get("error"));
-									}, 1000);
-								}
-							}}
-						>
-							Add Customer
-						</AwesomeButtonProgress>
-					</Modal.Footer>
-				</Modal>
-			</div>
+
 			<div className="searchComp">
 				<select
 					className="searchSelect"
@@ -291,10 +229,15 @@ export default function Customers() {
 								{/* <td>{customer[7]}</td>
 								<td>{customer[8]}</td> */}
 								<td>
-									<button></button>
+									<button
+										className="editButton"
+										onClick={(e) => editButtonClick(e, customer)}
+									>
+										Edit
+									</button>
 								</td>
 								<td>
-									<button></button>
+									<button className="deleteButton">Delete</button>
 								</td>
 							</tr>
 						))}
@@ -392,6 +335,116 @@ export default function Customers() {
 				pageRangeDisplayed={2}
 				previousClassName={"previous"}
 			/>
+			<AwesomeButton
+				type="primary"
+				className="addNewCustomerHeader"
+				onPress={() => {
+					setModal2Type("add");
+					openModalHandle2();
+				}}
+			>
+				Add New Customer
+			</AwesomeButton>
+			<div className="modal-container">
+				<Modal show={showM2} onHide={closeModal2} className="modal">
+					<Modal.Header className="modal-header">
+						<Modal.Title className="modal-title">
+							{modal2Type === "add"
+								? "Adding New Customer"
+								: `Editing ${customerName}'s Details`}
+						</Modal.Title>
+						<CloseButton className="closeBtn" onClick={closeModal2}>
+							X
+						</CloseButton>
+					</Modal.Header>
+					<Modal.Body className="modal-body">
+						<div className="registrationForm">
+							<input
+								className="firstNameInput"
+								type="text"
+								placeholder="Enter First Name"
+								value={first_name}
+								onChange={(e) =>
+									setFirstName(e.target.value.replace(/[^a-zA-Z]/gi, ""))
+								}
+							/>
+							<input
+								className="lastNameInput"
+								type="text"
+								placeholder="Enter Last Name"
+								value={last_name}
+								onChange={(e) =>
+									setLastName(e.target.value.replace(/[^a-zA-Z]/gi, ""))
+								}
+							/>
+							<input
+								className="emailInput"
+								type="email"
+								name="Email"
+								placeholder="Enter Email"
+								value={email}
+								onChange={(e) =>
+									setEmail(e.target.value.replace(/[^a-zA-Z0-9\-+~_@.]/gi, ""))
+								}
+								required
+							/>
+						</div>
+					</Modal.Body>
+					<Modal.Footer className="modal-footer">
+						<AwesomeButtonProgress
+							type="primary"
+							onPress={async (call, next) => {
+								const firstName = { first_name };
+								const lastName = { last_name };
+								const emailInput = { email };
+								const custID = { customer_id };
+								if (modal2Type === "add") {
+									const response = await fetch("/addcustomer", {
+										method: "POST",
+										headers: {
+											"Content-Type": "application/json",
+										},
+										body: JSON.stringify([firstName, lastName, emailInput]),
+									});
+									if (response.ok) {
+										setTimeout(() => {
+											next(true, "Added!");
+										}, 1000);
+									} else {
+										setTimeout(() => {
+											next(false, response.headers.get("error"));
+										}, 1000);
+									}
+								} else {
+									const response = await fetch("/editcustomer", {
+										method: "POST",
+										headers: {
+											"Content-Type": "application/json",
+										},
+										body: JSON.stringify([
+											firstName,
+											lastName,
+											emailInput,
+											custID,
+										]),
+									});
+									if (response.ok) {
+										setTimeout(() => {
+											next(true, "Edited!");
+										}, 1000);
+									} else {
+										setTimeout(() => {
+											next(false, response.headers.get("error"));
+										}, 1000);
+									}
+								}
+							}}
+						>
+							{modal2Type === "add" ? "Add Customer" : "Edit Customer Details"}
+						</AwesomeButtonProgress>
+					</Modal.Footer>
+				</Modal>
+			</div>
 		</>
 	);
 }
