@@ -1,4 +1,8 @@
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import {
+	faMagnifyingGlass,
+	faPencil,
+	faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -242,7 +246,7 @@ export default function Customers() {
 										className="editButton"
 										onClick={(e) => editButtonClick(e, customer)}
 									>
-										Edit
+										<FontAwesomeIcon icon={faPencil} />
 									</button>
 								</td>
 								<td>
@@ -250,7 +254,7 @@ export default function Customers() {
 										className="deleteButton"
 										onClick={(e) => deleteButtonClick(e, customer)}
 									>
-										Delete
+										<FontAwesomeIcon icon={faTrash} />
 									</button>
 								</td>
 							</tr>
@@ -431,7 +435,7 @@ export default function Customers() {
 									}
 								} else {
 									const response = await fetch("/editcustomer", {
-										method: "POST",
+										method: "PATCH",
 										headers: {
 											"Content-Type": "application/json",
 										},

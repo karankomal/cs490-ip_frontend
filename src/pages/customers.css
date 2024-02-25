@@ -110,3 +110,19 @@
 		color: transparent;
 	}
 }
+
+.editButton,
+.deleteButton {
+	background: transparent;
+	border: 2px solid white;
+	cursor: pointer;
+	color: #ffffff;
+	padding: 5px;
+	border-radius: 20%;
+
+	&:hover {
+		color: #55608f;
+		transition: box-shadow 0.3;
+		box-shadow: 0 0 11px white;
+	}
+}
