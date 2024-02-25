@@ -65,7 +65,12 @@
 }
 
 .firstNameInput,
-.lastNameInput {
+.lastNameInput,
+.cityInput,
+.districtInput,
+.countryInput,
+.postalCodeInput,
+.phoneInput {
 	height: 25px;
 	width: 300px;
 	font-size: 18px;
@@ -88,7 +93,9 @@
 	}
 }
 
-.emailInput {
+.emailInput,
+.addressLine1Input,
+.addressLine2Input {
 	height: 25px;
 	width: 450px;
 	font-size: 18px;

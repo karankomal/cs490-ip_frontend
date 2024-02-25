@@ -29,10 +29,20 @@ export default function Customers() {
 
 	const [customer_id, setCustomerID] = useState("");
 	const [film_id, setFilmID] = useState("");
+	const [address_id, setAddressID] = useState("");
+	const [city_id, setCityID] = useState("");
+	const [country_id, setCountryID] = useState("");
 
 	const [first_name, setFirstName] = useState("");
 	const [last_name, setLastName] = useState("");
 	const [email, setEmail] = useState("");
+	const [address, setAddress] = useState("");
+	const [address2, setAddress2] = useState("");
+	const [city, setCity] = useState("");
+	const [district, setDistrict] = useState("");
+	const [country, setCountry] = useState("");
+	const [postal_code, setPostalCode] = useState("");
+	const [phone, setPhone] = useState("");
 
 	const [page, setPage] = useState(1);
 	const [pageSize] = useState(10);
@@ -57,7 +67,6 @@ export default function Customers() {
 	};
 
 	const [showM2, setShowM2] = useState(false);
-	//const [modalData2, setModalData2] = useState([]);
 	const modalShow2 = () => {
 		setShowM2(true);
 	};
@@ -68,7 +77,6 @@ export default function Customers() {
 		setEmail("");
 	};
 	const openModalHandle2 = () => {
-		// setModalData2(modalData);
 		modalShow2();
 	};
 
@@ -143,10 +151,20 @@ export default function Customers() {
 			}`
 		);
 
+		setCustomerID(customer[0]);
 		setFirstName(customer[2]);
 		setLastName(customer[3]);
 		setEmail(customer[4]);
-		setCustomerID(customer[0]);
+		setAddressID(customer[5]);
+		setAddress(customer[9]);
+		setAddress2(customer[10]);
+		setDistrict(customer[11]);
+		setCityID(customer[12]);
+		setPostalCode(customer[13]);
+		setPhone(customer[14]);
+		setCity(customer[15]);
+		setCountryID(customer[16]);
+		setCountry(customer[17]);
 
 		openModalHandle2();
 	};
@@ -281,6 +299,26 @@ export default function Customers() {
 									<b>Email:</b> {customer[4]}
 								</li>
 								<li>
+									<b>Address:</b> <br />
+									{customer[9]}
+									<br />
+									{customer[10] && customer[10].trim() !== "" && (
+										<>
+											{customer[10]} <br />
+										</>
+									)}
+									{customer[15] +
+										", " +
+										customer[11] +
+										", " +
+										customer[17] +
+										" " +
+										customer[13]}
+								</li>
+								<li>
+									<b>Phone Number:</b> {customer[14]}
+								</li>
+								<li>
 									<b>Currently Renting:</b> {currentlyRenting}
 								</li>
 								<li>
@@ -385,6 +423,7 @@ export default function Customers() {
 								onChange={(e) =>
 									setFirstName(e.target.value.replace(/[^a-zA-Z]/gi, ""))
 								}
+								required
 							/>
 							<input
 								className="lastNameInput"
@@ -394,6 +433,7 @@ export default function Customers() {
 								onChange={(e) =>
 									setLastName(e.target.value.replace(/[^a-zA-Z]/gi, ""))
 								}
+								required
 							/>
 							<input
 								className="emailInput"
@@ -403,6 +443,82 @@ export default function Customers() {
 								value={email}
 								onChange={(e) =>
 									setEmail(e.target.value.replace(/[^a-zA-Z0-9\-+~_@.]/gi, ""))
+								}
+								required
+							/>
+							<input
+								className="addressLine1Input"
+								type="text"
+								name="Address Line 1"
+								placeholder="Enter Address Line 1"
+								value={address}
+								onChange={(e) =>
+									setAddress(e.target.value.replace(/[^a-zA-Z0-9 ]/gi, ""))
+								}
+								required
+							/>
+							<input
+								className="addressLine2Input"
+								type="text"
+								name="Address Line 2"
+								placeholder="Enter Address Line 2 (Optional)"
+								value={address2}
+								onChange={(e) =>
+									setAddress2(e.target.value.replace(/[^a-zA-Z0-9 ]/gi, ""))
+								}
+							/>
+							<input
+								className="cityInput"
+								type="text"
+								name="City"
+								placeholder="Enter City"
+								value={city}
+								onChange={(e) =>
+									setCity(e.target.value.replace(/[^a-zA-Z ]/gi, ""))
+								}
+								required
+							/>
+							<input
+								className="districtInput"
+								type="text"
+								name="District"
+								placeholder="Enter State/District"
+								value={district}
+								onChange={(e) =>
+									setDistrict(e.target.value.replace(/[^a-zA-Z ]/gi, ""))
+								}
+								required
+							/>
+							<input
+								className="countryInput"
+								type="text"
+								name="Country"
+								placeholder="Enter Country"
+								value={country}
+								onChange={(e) =>
+									setCountry(e.target.value.replace(/[^a-zA-Z ]/gi, ""))
+								}
+								required
+							/>
+							<input
+								className="postalCodeInput"
+								type="number"
+								name="Postal Code"
+								placeholder="Enter Postal Code"
+								value={postal_code}
+								onChange={(e) =>
+									setPostalCode(e.target.value.replace(/[^0-9- ]/gi, ""))
+								}
+								required
+							/>
+							<input
+								className="phoneInput"
+								type="text"
+								name="Phone"
+								placeholder="Enter Phone Number"
+								value={phone}
+								onChange={(e) =>
+									setPhone(e.target.value.replace(/[^0-9-()]/gi, ""))
 								}
 								required
 							/>
@@ -416,13 +532,34 @@ export default function Customers() {
 								const lastName = { last_name };
 								const emailInput = { email };
 								const custID = { customer_id };
+								const addressLine1 = { address };
+								const addressLine2 = { address2 };
+								const cityInput = { city };
+								const districtInput = { district };
+								const countryInput = { country };
+								const postalCodeInput = { postal_code };
+								const phoneInput = { phone };
+								const addressID = { address_id };
+								const cityID = { city_id };
+								const countryID = { country_id };
 								if (modal2Type === "add") {
 									const response = await fetch("/addcustomer", {
 										method: "POST",
 										headers: {
 											"Content-Type": "application/json",
 										},
-										body: JSON.stringify([firstName, lastName, emailInput]),
+										body: JSON.stringify([
+											firstName,
+											lastName,
+											emailInput,
+											addressLine1,
+											addressLine2,
+											cityInput,
+											districtInput,
+											countryInput,
+											postalCodeInput,
+											phoneInput,
+										]),
 									});
 									if (response.ok) {
 										setTimeout(() => {
@@ -443,7 +580,17 @@ export default function Customers() {
 											firstName,
 											lastName,
 											emailInput,
+											addressLine1,
+											addressLine2,
+											cityInput,
+											districtInput,
+											countryInput,
+											postalCodeInput,
+											phoneInput,
 											custID,
+											addressID,
+											cityID,
+											countryID,
 										]),
 									});
 									if (response.ok) {
