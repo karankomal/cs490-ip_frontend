@@ -3,3 +3,26 @@
 	-webkit-text-stroke: 1px #55608f;
 	font-size: 40px;
 }
+
+.addNewCustomerHeader {
+	margin-top: -20px !important;
+	margin-bottom: 15px !important;
+	--button-default-height: 50px !important;
+	--button-default-font-size: 18px !important;
+	--button-default-border-radius: 5px;
+	--button-horizontal-padding: 20px;
+	--button-vertical-padding: 5px;
+	--button-raise-level: 0px;
+	--button-hover-pressure: 1;
+	--transform-speed: 0.175s;
+	--button-primary-color: #55608f !important;
+	--button-primary-color-dark: #3d50a1;
+	--button-primary-color-light: white !important;
+	--button-primary-color-hover: #7f92e6;
+	--button-primary-color-active: #556193;
+	--button-primary-border: none;
+
+	&:hover {
+		--button-primary-color-light: white;
+	}
+}

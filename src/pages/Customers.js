@@ -2,11 +2,15 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { AwesomeButton, AwesomeButtonProgress } from "react-awesome-button";
+import "react-awesome-button/dist/styles.css";
 import { CloseButton, Modal } from "react-bootstrap";
 import ReactPaginate from "react-paginate";
+import "./aws-btn.css";
 import "./customers.css";
 import "./modal.css";
 import "./pagination.css";
+import "./search.css";
 import "./tables.css";
 
 export default function Customers() {
@@ -18,6 +22,9 @@ export default function Customers() {
 	const [filteredCustomers, setFilteredCustomers] = useState([]);
 	const [selectedFilter, setSelectedFilter] = useState(3);
 	const [searchValue, setSearchValue] = useState("");
+
+	const [customer_id, setCustomerID] = useState("");
+	const [film_id, setFilmID] = useState("");
 
 	const [page, setPage] = useState(1);
 	const [pageSize] = useState(10);
@@ -34,6 +41,7 @@ export default function Customers() {
 	};
 	const closeModal = () => {
 		setShowM(false);
+		setFilmID("");
 	};
 	const openModalHandle = () => {
 		setModalData(modalData);
@@ -82,6 +90,7 @@ export default function Customers() {
 		getCurrentRentalCount(customer_id);
 		getPreviousRentalCount(customer_id);
 		openModalHandle();
+		setCustomerID(customer_id);
 	}
 
 	function getCurrentRentalCount(customer_id) {
@@ -103,6 +112,9 @@ export default function Customers() {
 	return (
 		<>
 			<h1 className="customersHeader">Customers</h1>
+			<AwesomeButton type="primary" className="addNewCustomerHeader">
+				Add New Customer
+			</AwesomeButton>
 			<div className="searchComp">
 				<select
 					className="searchSelect"
@@ -147,6 +159,8 @@ export default function Customers() {
 						<th scope="col">Currently Active</th>
 						{/* <th scope="col">Created</th>
 						<th scope="col">Last Updated</th> */}
+						<th scope="col">Edit</th>
+						<th scope="col">Delete</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -179,6 +193,12 @@ export default function Customers() {
 								<td>{customer[6] === 1 ? "Yes" : "No"}</td>
 								{/* <td>{customer[7]}</td>
 								<td>{customer[8]}</td> */}
+								<td>
+									<button></button>
+								</td>
+								<td>
+									<button></button>
+								</td>
 							</tr>
 						))}
 				</tbody>
@@ -217,6 +237,43 @@ export default function Customers() {
 							</ul>
 						))}
 					</Modal.Body>
+					<Modal.Footer className="modal-footer">
+						<div className="rentFilm">
+							<input
+								className="rentFilmInput"
+								type="number"
+								min="0"
+								placeholder="Enter Film ID"
+								value={film_id}
+								onChange={(e) => setFilmID(e.target.value)}
+							/>
+							<AwesomeButtonProgress
+								type="primary"
+								onPress={async (call, next) => {
+									const custID = { customer_id };
+									const fID = { film_id };
+									const response = await fetch("/returnfilm", {
+										method: "POST",
+										headers: {
+											"Content-Type": "application/json",
+										},
+										body: JSON.stringify([custID, fID]),
+									});
+									if (response.ok) {
+										setTimeout(() => {
+											next(true, "Rental Returned!");
+										}, 1000);
+									} else {
+										setTimeout(() => {
+											next(false, response.headers.get("error"));
+										}, 1000);
+									}
+								}}
+							>
+								Return Film
+							</AwesomeButtonProgress>
+						</div>
+					</Modal.Footer>
 				</Modal>
 			</div>
 			<ReactPaginate

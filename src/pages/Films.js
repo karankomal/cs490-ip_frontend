@@ -10,6 +10,7 @@ import "./aws-btn.css";
 import "./films.css";
 import "./modal.css";
 import "./pagination.css";
+import "./search.css";
 import "./tables.css";
 
 export default function Films() {
@@ -20,7 +21,7 @@ export default function Films() {
 	const [searchValue, setSearchValue] = useState("");
 
 	const [customer_id, setCustomerID] = useState("");
-	const [film_id, setFilmID] = useState(0);
+	const [film_id, setFilmID] = useState("");
 
 	const [page, setPage] = useState(1);
 	const [pageSize] = useState(10);
@@ -224,7 +225,7 @@ export default function Films() {
 									});
 									if (response.ok) {
 										setTimeout(() => {
-											next(true, "Rental Confirmed");
+											next(true, "Rental Confirmed!");
 										}, 1000);
 									} else {
 										setTimeout(() => {
