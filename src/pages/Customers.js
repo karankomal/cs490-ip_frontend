@@ -130,20 +130,29 @@ export default function Customers() {
 	}
 	const [modal2Type, setModal2Type] = useState("");
 	const editButtonClick = (e, customer) => {
-		// Prevent the click event from propagating to the table row
 		e.stopPropagation();
-		// Handle button click logic here
+
 		setModal2Type("edit");
 		setCustomerName(
 			`${customer[2].charAt(0) + customer[2].slice(1).toLowerCase()} ${
 				customer[3].charAt(0) + customer[3].slice(1).toLowerCase()
 			}`
 		);
+
 		setFirstName(customer[2]);
 		setLastName(customer[3]);
 		setEmail(customer[4]);
 		setCustomerID(customer[0]);
+
 		openModalHandle2();
+	};
+
+	const [showDeleteModal, setShowDeleteModal] = useState(false);
+	const [selectedCustomer, setSelectedCustomer] = useState(null);
+	const deleteButtonClick = (e, customer) => {
+		e.stopPropagation();
+		setSelectedCustomer(customer);
+		setShowDeleteModal(true);
 	};
 
 	return (
@@ -237,7 +246,12 @@ export default function Customers() {
 									</button>
 								</td>
 								<td>
-									<button className="deleteButton">Delete</button>
+									<button
+										className="deleteButton"
+										onClick={(e) => deleteButtonClick(e, customer)}
+									>
+										Delete
+									</button>
 								</td>
 							</tr>
 						))}
@@ -441,6 +455,59 @@ export default function Customers() {
 							}}
 						>
 							{modal2Type === "add" ? "Add Customer" : "Edit Customer Details"}
+						</AwesomeButtonProgress>
+					</Modal.Footer>
+				</Modal>
+			</div>
+			<div className="modal-container">
+				<Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
+					<Modal.Header>
+						<Modal.Title>Delete Customer</Modal.Title>
+						<CloseButton
+							className="closeBtn"
+							onClick={() => setShowDeleteModal(false)}
+						>
+							X
+						</CloseButton>
+					</Modal.Header>
+					<Modal.Body>
+						<p>
+							Are you sure you want to delete the customer? This is{" "}
+							<b>PERMANENT.</b>
+						</p>
+						{selectedCustomer && (
+							<div>
+								<p>Customer ID: {selectedCustomer[0]}</p>
+								<p>First Name: {selectedCustomer[2]}</p>
+								<p>Last Name: {selectedCustomer[3]}</p>
+							</div>
+						)}
+					</Modal.Body>
+					<Modal.Footer>
+						<AwesomeButtonProgress
+							type="primary"
+							onPress={async (call, next) => {
+								setCustomerID(selectedCustomer[0]);
+								const custID = { customer_id };
+								const response = await fetch("/deletecustomer", {
+									method: "DELETE",
+									headers: {
+										"Content-Type": "application/json",
+									},
+									body: JSON.stringify([custID]),
+								});
+								if (response.ok) {
+									setTimeout(() => {
+										next(true, "Deleted!");
+									}, 1000);
+								} else {
+									setTimeout(() => {
+										next(false, response.headers.get("error"));
+									}, 1000);
+								}
+							}}
+						>
+							Delete Customer
 						</AwesomeButtonProgress>
 					</Modal.Footer>
 				</Modal>
