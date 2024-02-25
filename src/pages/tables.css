@@ -2,7 +2,7 @@
 .top5Actors,
 .top5Rented,
 .allFilms {
-	width: 800px;
+	width: 830px;
 	border-collapse: collapse;
 	overflow: hidden;
 	box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);

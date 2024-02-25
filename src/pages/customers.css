@@ -26,3 +26,87 @@
 		--button-primary-color-light: white;
 	}
 }
+.returnFilm {
+	align-items: center;
+	align-content: center;
+	display: flex;
+	justify-content: center;
+}
+
+.returnFilmInput {
+	height: 25px;
+	width: 200px;
+	font-size: 20px;
+	font-weight: bold;
+	text-align: center;
+	border-style: none;
+	cursor: text;
+	border-radius: 5px;
+	color: #55608f;
+	margin-right: 10px;
+	margin-top: 4px;
+	margin-bottom: 4px;
+
+	&::placeholder {
+		color: #55608f;
+	}
+
+	&:focus::placeholder {
+		color: transparent;
+	}
+}
+
+.registrationForm {
+	display: inline-flex;
+	flex-direction: column;
+	padding: 10px;
+	justify-content: center;
+	align-items: center;
+}
+
+.firstNameInput,
+.lastNameInput {
+	height: 25px;
+	width: 300px;
+	font-size: 18px;
+	font-weight: bold;
+	text-align: center;
+	border-style: none;
+	cursor: text;
+	border-radius: 5px;
+	color: #55608f;
+	margin-right: 10px;
+	margin-top: 4px;
+	margin-bottom: 4px;
+
+	&::placeholder {
+		color: #55608f;
+	}
+
+	&:focus::placeholder {
+		color: transparent;
+	}
+}
+
+.emailInput {
+	height: 25px;
+	width: 350px;
+	font-size: 18px;
+	font-weight: bold;
+	text-align: center;
+	border-style: none;
+	cursor: text;
+	border-radius: 5px;
+	color: #55608f;
+	margin-right: 10px;
+	margin-top: 4px;
+	margin-bottom: 4px;
+
+	&::placeholder {
+		color: #55608f;
+	}
+
+	&:focus::placeholder {
+		color: transparent;
+	}
+}

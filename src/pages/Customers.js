@@ -26,6 +26,10 @@ export default function Customers() {
 	const [customer_id, setCustomerID] = useState("");
 	const [film_id, setFilmID] = useState("");
 
+	const [first_name, setFirstName] = useState("");
+	const [last_name, setLastName] = useState("");
+	const [email, setEmail] = useState("");
+
 	const [page, setPage] = useState(1);
 	const [pageSize] = useState(10);
 	const indexOfLastCustomer = page * pageSize;
@@ -46,6 +50,22 @@ export default function Customers() {
 	const openModalHandle = () => {
 		setModalData(modalData);
 		modalShow();
+	};
+
+	const [showM2, setShowM2] = useState(false);
+	//const [modalData2, setModalData2] = useState([]);
+	const modalShow2 = () => {
+		setShowM2(true);
+	};
+	const closeModal2 = () => {
+		setShowM2(false);
+		setFirstName("");
+		setLastName("");
+		setEmail("");
+	};
+	const openModalHandle2 = () => {
+		// setModalData2(modalData);
+		modalShow2();
 	};
 
 	useEffect(() => {
@@ -112,9 +132,86 @@ export default function Customers() {
 	return (
 		<>
 			<h1 className="customersHeader">Customers</h1>
-			<AwesomeButton type="primary" className="addNewCustomerHeader">
+			<AwesomeButton
+				type="primary"
+				className="addNewCustomerHeader"
+				onPress={openModalHandle2}
+			>
 				Add New Customer
 			</AwesomeButton>
+			<div className="modal-container">
+				<Modal show={showM2} onHide={closeModal2} className="modal">
+					<Modal.Header className="modal-header">
+						<Modal.Title className="modal-title">
+							{"Adding New Customer"}
+						</Modal.Title>
+						<CloseButton className="closeBtn" onClick={closeModal2}>
+							X
+						</CloseButton>
+					</Modal.Header>
+					<Modal.Body className="modal-body">
+						<div className="registrationForm">
+							<input
+								className="firstNameInput"
+								type="text"
+								placeholder="Enter First Name"
+								value={first_name}
+								onChange={(e) =>
+									setFirstName(e.target.value.replace(/[^a-zA-Z]/gi, ""))
+								}
+							/>
+							<input
+								className="lastNameInput"
+								type="text"
+								placeholder="Enter Last Name"
+								value={last_name}
+								onChange={(e) =>
+									setLastName(e.target.value.replace(/[^a-zA-Z]/gi, ""))
+								}
+							/>
+							<input
+								className="emailInput"
+								type="email"
+								name="Email"
+								placeholder="Enter Email"
+								value={email}
+								onChange={(e) =>
+									setEmail(e.target.value.replace(/[^a-zA-Z0-9\-+~_@.]/gi, ""))
+								}
+								required
+							/>
+						</div>
+					</Modal.Body>
+					<Modal.Footer className="modal-footer">
+						<AwesomeButtonProgress
+							type="primary"
+							onPress={async (call, next) => {
+								const firstName = { first_name };
+								const lastName = { last_name };
+								const emailInput = { email };
+								const response = await fetch("/addcustomer", {
+									method: "POST",
+									headers: {
+										"Content-Type": "application/json",
+									},
+									body: JSON.stringify([firstName, lastName, emailInput]),
+								});
+								if (response.ok) {
+									setTimeout(() => {
+										next(true, "Added!");
+									}, 1000);
+								} else {
+									setTimeout(() => {
+										next(false, response.headers.get("error"));
+									}, 1000);
+								}
+							}}
+						>
+							Add Customer
+						</AwesomeButtonProgress>
+					</Modal.Footer>
+				</Modal>
+			</div>
 			<div className="searchComp">
 				<select
 					className="searchSelect"
@@ -238,9 +335,9 @@ export default function Customers() {
 						))}
 					</Modal.Body>
 					<Modal.Footer className="modal-footer">
-						<div className="rentFilm">
+						<div className="returnFilm">
 							<input
-								className="rentFilmInput"
+								className="returnFilmInput"
 								type="number"
 								min="0"
 								placeholder="Enter Film ID"

@@ -31,13 +31,13 @@ export default function Films() {
 		setPage(selected + 1);
 	};
 
-	const [showM, set_Show_M] = useState(false);
+	const [showM, setShowM] = useState(false);
 	const [modalData, set_Modal_Data] = useState([]);
 	const modalShow = () => {
-		set_Show_M(true);
+		setShowM(true);
 	};
 	const closeModal = () => {
-		set_Show_M(false);
+		setShowM(false);
 		setCustomerID("");
 	};
 	const openModalHandle = () => {
